@@ -2006,3 +2006,7 @@ const rightList = [
    44089,
    84471,
 ];
+
+const calculateButtonElem = document.querySelector(".btn");
+
+const outputDiv = document.getElementById('output');
