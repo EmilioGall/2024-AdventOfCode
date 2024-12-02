@@ -29,3 +29,38 @@ function debounce(functionToCall, delay) {
    };
 
 };
+
+
+/**
+ * Description: function calculate the total distance between two lists.
+ * @param {array} array1
+ * @param {array} array2
+ * @returns {number}
+ */
+function calculateTotalDistance(array1, array2) {
+
+   // Sort both lists in ascending order
+   const sortedArray1 = array1.sort((a, b) => a - b);
+
+   const sortedArray2 = array2.sort((a, b) => a - b);
+
+   // Calculate the total distance
+   let totalDistance = 0;
+
+   for (let i = 0; i < Math.min(sortedArray1.length, sortedArray2.length); i++) {
+
+      const distanceBetweenPairs = Math.abs(sortedArray1[i] - sortedArray2[i]);
+
+      totalDistance += distanceBetweenPairs;
+
+   };
+
+   console.log(`totalDistance`, totalDistance);
+   
+
+   // Display the result in the output div
+   outputDiv.innerText = `Total distance: ${totalDistance}`;
+
+   return totalDistance;
+
+}
