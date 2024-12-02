@@ -56,11 +56,59 @@ function calculateTotalDistance(array1, array2) {
    };
 
    console.log(`totalDistance`, totalDistance);
-   
 
    // Display the result in the output div
-   outputDiv.innerText = `Total distance: ${totalDistance}`;
+   outputDiv.innerText = `Part 1 - Total distance: ${totalDistance}`;
 
    return totalDistance;
 
-}
+};
+
+
+/**
+ * Description: function calculate the score of similarity between two lists.
+ * @param {array} array1
+ * @param {array} array2
+ * @returns {number}
+ */
+function calculateSimilarityScore(array1, array2) {
+
+   // Create a frequency map for the right list to count occurrences of each number
+   const frequencyMap = {};
+
+   for (const num of array2) {
+
+      if (frequencyMap[num]) {
+
+         frequencyMap[num]++;
+
+      } else {
+
+         frequencyMap[num] = 1;
+
+      };
+
+   };
+
+   // Initialize the similarity score
+   let similarityScore = 0;
+
+   // Calculate the score for the left list based on the frequency map
+   for (const num of array1) {
+
+      // Get the count for the number, default to 0 if not found
+      const count = frequencyMap[num] || 0;
+
+      // Update the similarity score
+      similarityScore += num * count;
+
+   };
+
+   console.log(`similarityScore`, similarityScore);
+
+   // Display the result in the output div
+   outputDiv2.innerText = `Part 2 - Similarity Score: ${similarityScore}`;
+
+   return similarityScore;
+
+};
