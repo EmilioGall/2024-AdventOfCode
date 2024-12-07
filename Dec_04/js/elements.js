@@ -146,6 +146,9 @@ AXXSSMSXMMMMMSMMSAMSSMXMSMASXSMXMASXMSSMXXMASXSXXXSAMXMAMXMMMMMXSSMXAXMASXMMMSAM
 
 const formattedGrid = puzzleInput.trim().split("\n").map(line => line.trim().split(""));
 
+console.log('formattedGrid', formattedGrid);
+
+
 const calculateButtonElem = document.querySelector(".btn");
 
 const outputDiv = document.getElementById('output');

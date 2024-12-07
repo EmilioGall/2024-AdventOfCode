@@ -41,7 +41,7 @@ function debounce(functionToCall, delay) {
  * @param {number} dy - The delta y (direction to move on the y-axis).
  * @returns {boolean} - Returns true if "XMAS" can be found, false otherwise.
  */
-function checkWord(x, y, dx, dy) {
+function checkWord(grid, word, wordLength, width, height, x, y, dx, dy) {
 
    // Loop through each character of "XMAS"
    for (let i = 0; i < wordLength; i++) {
@@ -69,7 +69,7 @@ function checkWord(x, y, dx, dy) {
 /**
  * Description: function counts occurrences of the word "XMAS" in a given 2D grid. The search supports various orientations such as horizontal, vertical, diagonal, and their reversed counterparts.
  * 
- * @param {string[][]} grid - A 2D array of characters representing the letter grid.
+ * @param {array} grid - A 2D array of characters representing the letter grid.
  * @returns {number} - The total number of times "XMAS" appears in the grid.
  */
 function countXMASOccurrences(grid) {
@@ -112,7 +112,7 @@ function countXMASOccurrences(grid) {
          for (const dir of directions) {
 
             // If we find "XMAS" in the current direction
-            if (checkWord(x, y, dir.dx, dir.dy)) {
+            if (checkWord(grid, word, wordLength, width, height, x, y, dir.dx, dir.dy)) {
 
                // Increment the occurrence counter
                count++;
@@ -127,6 +127,115 @@ function countXMASOccurrences(grid) {
 
    // Display the result in the output div
    outputDiv.innerText = `Part 1 - Total XMAS Occurrencies: ${count}`;
+
+   // Return the total count of occurrences found
+   return count;
+
+};
+
+/**
+ * Description: function checks if the word "X-MAS" can be found starting from a specific position (x, y) and following the pattern of "X-MAS".
+ * 
+ * @param {number} x - The starting x-coordinate in the grid.
+ * @param {number} y - The starting y-coordinate in the grid.
+ * @param {array} grid - The 2D array representing the letter grid.
+ * @param {number} width - The number of columns in the grid.
+ * @param {number} height - The number of rows in the grid.
+ * @returns {boolean} - Returns true if "X-MAS" can be found, false otherwise.
+ */
+function checkXMAS(x, y, grid, width, height) {
+
+   // Check if we have enough space for the X-MAS structure
+   if (x + 2 >= width || y + 2 >= height) {
+
+      return false; // Out of bounds
+
+   };
+
+   // Check for the "MSAMS" structure
+   const msams = (
+
+      grid[y][x] === 'M' && // Top-left
+      grid[y][x + 2] === 'S' && // Top-right
+      grid[y + 1][x + 1] === 'A' && // Center
+      grid[y + 2][x] === 'M' && // Bottom-left
+      grid[y + 2][x + 2] === 'S' // Bottom-right
+
+   );
+
+   // Check for the "MMASS" structure 
+   const mmass = (
+
+      grid[y][x] === 'M' && // Top-left
+      grid[y][x + 2] === 'M' && // Top-right
+      grid[y + 1][x + 1] === 'A' && // Center
+      grid[y + 2][x] === 'S' && // Bottom-left
+      grid[y + 2][x + 2] === 'S' // Bottom-right
+
+   );
+
+   // Check for the "SSAMM" structure
+   const ssamm = (
+
+      grid[y][x] === 'S' && // Top-left
+      grid[y][x + 2] === 'S' && // Top-right
+      grid[y + 1][x + 1] === 'A' && // Center
+      grid[y + 2][x] === 'M' && // Bottom-left
+      grid[y + 2][x + 2] === 'M' // Bottom-right
+
+   );
+
+   // Check for the "SMASM" structure
+   const smasm = (
+
+      grid[y][x] === 'S' && // Top-left
+      grid[y][x + 2] === 'M' && // Top-right
+      grid[y + 1][x + 1] === 'A' && // Center
+      grid[y + 2][x] === 'S' && // Bottom-left
+      grid[y + 2][x + 2] === 'M' // Bottom-right
+
+   );
+
+   // Return true if either configuration is found
+   return msams || mmass || ssamm || smasm;
+
+};
+
+/**
+* Description: function counts occurrences of "X-MAS" in the shape of X in a given 2D grid. The function looks for the defined structure of "X-MAS".
+* 
+* @param {array} grid - A 2D array of characters representing the letter grid.
+* @returns {number} - The total number of times "X-MAS" appears as an X.
+*/
+function countXMAS(grid) {
+
+   // Determine the height (number of rows) of the grid
+   const height = grid.length;
+
+   // Determine the width (number of columns) of the grid
+   const width = grid[0].length;
+
+   // Initialize a counter to track the number of occurrences of "X-MAS"
+   let count = 0;
+
+   // Iterate over every cell (y, x) in the grid
+   for (let y = 0; y < height; y++) {
+
+      for (let x = 0; x < width; x++) {
+
+         // Check if "X-MAS" can be found at the current position
+         if (checkXMAS(x, y, grid, width, height)) {
+
+            count++; // Increment count if found
+
+         };
+
+      };
+
+   };
+
+   // Display the result in the output div
+   outputDiv2.innerText = `Part 2 - Total X-MAS Occurrencies: ${count}`;
 
    // Return the total count of occurrences found
    return count;
