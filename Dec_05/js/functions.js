@@ -125,6 +125,100 @@ function getMiddlePage(update) {
 };
 
 /**
+ * Description: function swaps the values of two keys in an object if both keys exist
+ * 
+ * @param {Object} obj - The input object containing keys to swap
+ * @param {any} key1 - The first key to swap
+ * @param {any} key2 - The second key to swap
+ * @returns {Object|undefined} - Returns the modified object, or undefined if the keys do not exist
+ */
+function swapKeys(obj, key1, key2) {
+
+   // Create a shallow copy of the input object to avoid mutating the original
+   let objCopy = { ...obj }
+
+   // Check if the keys exist in the object
+   if (objCopy.hasOwnProperty(key1) && objCopy.hasOwnProperty(key2)) {
+
+      // Store the values temporarily
+      let temp = objCopy[key1];
+
+      // Swap the values
+      objCopy[key1] = objCopy[key2];
+      objCopy[key2] = temp;
+
+      // Return the modified object
+      return objCopy;
+
+   } else {
+
+      // Key(s) provided do not exist in the object, log a message to the console
+      console.log("One or both keys do not exist in the object.");
+
+   };
+
+};
+
+/**
+ * Description: function corrects the order of pages in an incorrect update based on the rules
+ * 
+ * @param {Array<string>} update - An array of page IDs representing the order of pages
+ * @param {Array<Object>} rules - An array of rule objects defining the required ordering
+ * @returns {Array<string>} - The correctly ordered pages
+ */
+function topologicalSort(update, rules) {
+
+   // Create a copy of the update array
+   let ordered = [...update];
+
+   // Flag to check if the sorting is complete
+   let isSorted = false;
+
+   // Continue sorting until the order is correct according to the rules
+   while (!isSorted) {
+
+      // Assume it's sorted unless we find a violation
+      isSorted = true;
+
+      // Iterate through each rule to check the order of the pages
+      for (const rule of rules) {
+
+         // Page ID that must come before
+         const before = rule.before;
+
+         // Page ID that must come after
+         const after = rule.after;
+
+         // Only proceed if both pages exist in the current order
+         const beforeIndex = ordered.indexOf(before);
+         const afterIndex = ordered.indexOf(after);
+
+         // If both before and after pages are present in the ordered array
+         if (beforeIndex !== -1 && afterIndex !== -1) {
+
+            // If the order is incorrect
+            if (beforeIndex > afterIndex) {
+
+               // Swap the two pages to correct the order
+               [ordered[beforeIndex], ordered[afterIndex]] = [ordered[afterIndex], ordered[beforeIndex]];
+
+               // Set sorted to false, we need another pass
+               isSorted = false;
+
+            };
+
+         };
+
+      };
+
+   };
+
+   // Return the correctly ordered pages
+   return ordered;
+
+};
+
+/**
  * Description: Main function to process input of rules and updates, checking the validity of the updates based on the rules and calculating the total of middle page IDs that are valid
  * 
  * @param {string} rulesInput - A multiline string input defining the ordering rules between page IDs
@@ -151,6 +245,8 @@ function processUpdates(rulesInput, updatesInput) {
    // Initialize a total counter for the middle page IDs
    let total = 0;
 
+   let incorrectUpdates = [];
+
    // Iterate through each update to check its validity against rules
    updates.forEach((update) => {
 
@@ -164,6 +260,8 @@ function processUpdates(rulesInput, updatesInput) {
 
       } else if (!isCorrectlyOrdered(update, rules)) {
 
+         incorrectUpdates.push(update);
+
          console.log(`%c${getMiddlePage(update)}`, 'color:white; background-color:brown;padding:5px; font-size:15px');
 
       };
@@ -171,9 +269,37 @@ function processUpdates(rulesInput, updatesInput) {
    });
 
    // Display the result in the output div
-   outputDiv2.innerText = `Part 1 - Total middle pages: ${total}`;
+   outputDiv.innerText = `Part 1 - Total sum of correct middle pages: ${total}`;
 
-   // Return the total sum of middle page IDs
-   return total;
+   console.log(`%cincorrectUpdates`, 'color:black; background-color:cyan;padding:20px; font-size:20px');
+   console.log('incorrectUpdates', incorrectUpdates);
+
+   // Initialize a counter for the total of middle pages in corrected updates
+   let totalIncorrect = 0;
+
+   incorrectUpdates.forEach(update => {
+
+      console.log('incorrectedOrder', update);
+
+      // Correct the order of each incorrect update based on the required rules
+      const correctedOrder = topologicalSort(update, rules);
+
+      console.log('correctedOrder', correctedOrder);
+
+      // Get the middle page from the corrected order
+      const middlePage = getMiddlePage(correctedOrder);
+
+      console.log('middlePage', middlePage);
+
+      // Accumulate the total of middle pages
+      totalIncorrect += Number(middlePage);
+
+   });
+
+   // Display the result of corrected updates in the output div
+   outputDiv2.innerText = `Part 2 - Total sum of corrected middle pages: ${totalIncorrect}`;
+
+   // Return the total sum of middle page IDs from both correctly and incorrectly ordered updates
+   return [total, totalIncorrect];
 
 };
