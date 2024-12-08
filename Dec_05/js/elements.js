@@ -1,6 +1,6 @@
 console.log('///// Elements /////');
 
-const puzzleInput = `
+const rulesInput = `
 96|54
 79|47
 79|13
@@ -1179,7 +1179,31 @@ const puzzleInput = `
 23|43
 `;
 
-const puzzleInput2 = `
+// const rulesInput = `
+// 47|53
+// 97|13
+// 97|61
+// 97|47
+// 75|29
+// 61|13
+// 75|53
+// 29|13
+// 97|29
+// 53|29
+// 61|53
+// 97|53
+// 61|29
+// 47|13
+// 75|47
+// 97|75
+// 47|61
+// 75|61
+// 47|29
+// 75|13
+// 53|13
+// `;
+
+const updatesInput = `
 78,18,57,52,59,14,87,53,15,28,94
 55,88,31,49,93,59,53,13,46,57,86,43,15,18,78,94,52,27,14
 33,19,35,67,62,21,47
@@ -1383,10 +1407,14 @@ const puzzleInput2 = `
 46,68,57,86,43,15,18,78,75,94,52,27,14,61,37,96,69,33,28,87,26,82,79
 `;
 
-const formattedGrid = puzzleInput.trim().split("\n").map(line => line.trim().split(""));
-
-console.log('formattedGrid', formattedGrid);
-
+// const updatesInput = `
+// 75,47,61,53,29
+// 97,61,53,29,13
+// 75,29,13
+// 75,97,47,61,53
+// 61,13,29
+// 97,13,75,29,47
+// `;
 
 const calculateButtonElem = document.querySelector(".btn");
 
